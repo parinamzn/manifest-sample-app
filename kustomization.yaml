@@ -1,9 +1,9 @@
-namespace: dev
+namespace: prod
 commonLabels:
-  environment: dev
+  environment: prod
   kustomization: enabled
 nameSuffix:
-  -dev
+  -prod
 images:
 - name: nginx
   newTag: alpine
