@@ -1,0 +1,13 @@
+namespace: dev
+commonLabels:
+  environment: dev
+  kustomization: enabled
+nameSuffix:
+  -dev
+images:
+- name: nginx
+  newTag: alpine
+resources:
+- deploy.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
