@@ -12,24 +12,25 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/instance: nginx-dp
 ---
+
 # Source: popoint-essential/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-dp
   labels:
-    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/instance: nginx-dp
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app.kubernetes.io/instance: nginx
+      app.kubernetes.io/instance: nginx-dp
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: nginx
+        app.kubernetes.io/instance: nginx-dp
     spec:
       containers:
         - name: nginx-nginx
@@ -47,22 +48,41 @@ spec:
               cpu: "0.01"
               memory: 128Mi
 ---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx-dp-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx-dp
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+---
 # Source: popoint-essential/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-dp2
   labels:
-    app.kubernetes.io/instance: nginx
+    app.kubernetes.io/instance: nginx-dp2
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app.kubernetes.io/instance: nginx
+      app.kubernetes.io/instance: nginx-dp2
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: nginx
+        app.kubernetes.io/instance: nginx-dp2
     spec:
       containers:
         - name: nginx-nginx
